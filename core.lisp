@@ -11,14 +11,21 @@
 
 ;; where guesses is a list of dotteded pairs of (17 . us-equities)
 (defun good-enough? (guess)
-  (let* ((asset-meta (assoc (car guess) yale-model))
+  (let* ((curr-shares (cdr guess))
+         (asset-meta (assoc (car guess) yale-model))
          (percentage (cadr asset-meta))
          (price (caddr asset-meta))
-        (maximum (/ (* budget percentage) price)))
-    (values
-     (* percentage
-        (cdr guess))
-     maximum)))
+         (maximum-shares (/ (* budget percentage) price)))
+    (if (> curr-shares maximum-shares)
+        nil
+        true)))
+
+(defun improve (guess))
+
+(defun pick-iter (guess)
+  (if (good-enough? guess)
+      guess
+      (pick-iter (improve guess))))
 
 (good-enough? '(us-equities . 17))
 
