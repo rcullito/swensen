@@ -1,45 +1,24 @@
-(defvar yale-model
-  '((us-equities .30 178)
-    (foreign-equities . .15)
-    (emerging-equities . .5)
-    (inter-treasuries . .15)
-    (tips . .15)
-    (reits . .20)))
 
 
+
+(defvar percentage .30)
+(defvar price 178)
 (defvar budget 10000)
+(defvar maximum-shares (floor (/ (* budget percentage) price)))
 
-;; where guesses is a list of dotteded pairs of (17 . us-equities)
 (defun good-enough? (guess)
-  (let* ((curr-shares (cdr guess))
-         (asset-meta (assoc (car guess) yale-model))
-         (percentage (cadr asset-meta))
-         (price (caddr asset-meta))
-         (maximum-shares (/ (* budget percentage) price)))
-    (if (> curr-shares maximum-shares)
-        nil
-        true)))
+  (or (= maximum-shares guess)
+      (= (1- maximum-shares) guess)))
 
-(defun improve (guess))
+(defun improve (guess)
+  (cond ((> guess maximum-shares) (1- guess))
+        ((< (1+ guess) maximum-shares) (1+ guess))
+        (t guess)))
 
-(defun pick-iter (guess)
+(defun pick (guess)
   (if (good-enough? guess)
       guess
-      (pick-iter (improve guess))))
-
-(good-enough? '(us-equities . 17))
-
-(cdr (assoc 'us-equities yale-model))
+      (pick (improve guess))))
 
 
-(defvar guesses '((us-equities . 17)
-                  (foreign-equities . 6)
-                  (emerging-equities . 4)
-                  (inter-treasuries . 12)
-                  (tips . 8)
-                  (reits . 24)))
-
-
-
-
-(mapcar #'car all-weather)
+(pick 8)
