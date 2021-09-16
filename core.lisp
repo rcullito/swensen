@@ -15,21 +15,17 @@
 
 (defvar budget 10000)
 
-(defun percent (n)
-  (/ n 100))
 
-(defun max-asset-class-value (asset-class model)
-  (let ((percentage (percent (cadr (assoc asset-class model)))))
-    (* budget
-       percentage)))
-
-
-;; the value of shares of emerging must be <= to
-(max-asset-class-value 'emerging-equities yale-model)
-(max-asset-class-value 'us-equities all-weather)
+;; where guesses is a list of dotteded pairs of (17 . us-equities)
+(defun good-enough? (guesses)
+  (and ))
 
 
 
 
 
 
+
+
+
+(mapcar #'car all-weather)
