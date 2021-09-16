@@ -6,6 +6,8 @@
 (defvar budget 10000)
 (defvar maximum-shares (floor (/ (* budget percentage) price)))
 
+;; good-enough? / improve model 
+
 (defun good-enough? (guess)
   (or (= maximum-shares guess)
       (= (1- maximum-shares) guess)))
