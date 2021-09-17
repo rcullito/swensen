@@ -33,4 +33,10 @@
 (defun next-pick (fund)
   (improve (car fund) (cdr fund)))
 
-(next-pick (list emerging us-equities))
+(defun allocate (fund budget)
+  ;; TODO here
+  (next-pick fund))
+
+(allocate (list emerging us-equities) budget)
+
+
