@@ -1,26 +1,37 @@
 
 
+(defstruct etf
+  weight
+  num
+  price)
 
-(defvar percentage .30)
-(defvar price 178)
-(defvar budget 10000)
-(defvar maximum-shares (floor (/ (* budget percentage) price)))
+(defmethod current-weight (e)
+  (if (zerop (etf-num e))
+      0
+      (/ budget (* (etf-num e) (etf-price e)))))
 
-;; good-enough? / improve model 
+(defvar budget 1000)
 
-(defun good-enough? (guess)
-  (or (= maximum-shares guess)
-      (= (1- maximum-shares) guess)))
+(defvar emerging (make-etf :weight .05
+                                   :num 12
+                                   :price 64))
 
-(defun improve (guess)
-  (cond ((> guess maximum-shares) (1- guess))
-        ((< (1+ guess) maximum-shares) (1+ guess))
-        (t guess)))
-
-(defun pick (guess)
-  (if (good-enough? guess)
-      guess
-      (pick (improve guess))))
+(defparameter us-equities (make-etf :weight .30
+                                     :num 0
+                                     :price 172))
 
 
-(pick 8)
+
+(defun improve (best-so-far fund)
+  (cond ((null fund)
+         best-so-far)
+        ((> (current-weight best-so-far) (current-weight (car fund)))
+         (improve best-so-far (cdr fund)))
+        (t (improve (car fund) (cdr fund)))))
+
+(defun next-pick (fund)
+  (improve (car fund) (cdr fund)))
+
+(next-pick (list emerging us-equities))
+
+
