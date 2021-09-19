@@ -16,14 +16,19 @@
     (tips .15 VTIP 52.66 )
     (reits .20 VNQ 106.37)))
 
-(defun create-etf (asset-class weight ticker price)
-  `(defmacro ,asset-class ()
-     (make-etf :ticker ,ticker
-               :asset-class ,asset-class
-               :weight ,weight
-               :num 0
-               :price ,price
-               :budget initial-budget)))
+(defmacro create-etf (asset-class weight ticker price)
+  `(make-etf :ticker ,ticker
+             :asset-class ,asset-class
+             :weight ,weight
+             :num 0
+             :price ,price
+             :budget initial-budget))
+
+(defmacro create-fund (model)
+  `(mapcar (lambda (asset)
+             (destructuring-bind (asset-class weight ticker price) asset
+               (create-etf asset-class weight ticker price)))
+        ,model))
 
 (defmethod expenditure (e)
   (* (etf-num e) (etf-price e)))
@@ -51,28 +56,6 @@
         (incf (etf-num pick))
         (allocate fund (- budget (etf-price pick))))))
 
-(defun initialize (model)
-  (mapc (lambda (asset)
-        (apply #'create-etf asset))
-      model))
-
-(let ((initial-budget 4000)
-      (model 'swensen-model))
-  (initialize model)
-  (allocate (list (emerging)
-                  (us-equities)
-                  (foreign-equities)
-                  (inter-treasuries)
-                  (tips)
-                  (reits))
-            initial-budget))
-
-
-
-
-
-
-
-
-
-
+(let* ((initial-budget 4000)
+      (fund (create-fund swensen-model)))
+  (allocate fund initial-budget))
