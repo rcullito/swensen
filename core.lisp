@@ -8,6 +8,13 @@
   price
   budget)
 
+(defvar swensen-model
+  '((emerging .05 VWO 51.44)
+    (us-equities .30 VTI 229.13)
+    (foreign-equities .15 VT 105.15)
+    (inter-treasuries .15 VGIT 67.96)
+    (tips .15 VTIP 52.66 )
+    (reits .20 VNQ 106.37)))
 
 (defun create-etf (asset-class weight ticker price)
   `(defmacro ,asset-class ()
@@ -17,14 +24,6 @@
                :num 0
                :price ,price
                :budget initial-budget)))
-
-;; todo make these all lists and then just map each of them to create-etf
-(create-etf 'emerging .05 'VWO 51.44)
-(create-etf 'us-equities .30 'VTI 229.13)
-(create-etf 'foreign-equities .15 'VT 105.15)
-(create-etf 'inter-treasuries .15 'VGIT 67.96)
-(create-etf 'tips .15 'VTIP 52.66 )
-(create-etf 'reits .20 'VNQ 106.37)
 
 (defmethod expenditure (e)
   (* (etf-num e) (etf-price e)))
@@ -52,7 +51,14 @@
         (incf (etf-num pick))
         (allocate fund (- budget (etf-price pick))))))
 
-(let ((initial-budget 4000))
+(defun initialize (model)
+  (mapc (lambda (asset)
+        (apply #'create-etf asset))
+      model))
+
+(let ((initial-budget 4000)
+      (model 'swensen-model))
+  (initialize model)
   (allocate (list (emerging)
                   (us-equities)
                   (foreign-equities)
