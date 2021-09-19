@@ -3,28 +3,28 @@
 (defstruct etf
   weight
   num
-  price)
+  price
+  budget)
 
-(defun emerging ()
-    (make-etf :weight .30
-              :num 0
-              :price 10))
+(defmacro emerging ()
+  `(make-etf :weight .30
+             :num 0
+             :price 10
+             :budget initial-budget))
 
-(defun us-equities ()
-  (make-etf :weight .70
+(defmacro us-equities ()
+  `(make-etf :weight .70
             :num 0
-            :price 10))
+            :price 10
+            :budget initial-budget))
 
 (defmethod expenditure (e)
   (* (etf-num e) (etf-price e)))
 
-;; current weight should always be calculated off of the initial budget
-;; not the remaining expenditure
-
 (defmacro current-weight (e)
   `(if (zerop (etf-num ,e))
       0
-      (/ (expenditure ,e) budget)))
+      (/ (expenditure ,e) (etf-budget ,e))))
 
 (defmacro far-off (e)
   `(- (etf-weight ,e) (current-weight ,e)))
@@ -47,11 +47,12 @@
         (incf (etf-num pick))
         (allocate fund (- budget (etf-price pick))))))
 
-(allocate (list (emerging) (us-equities)) 100)
+(let ((initial-budget 100))
+  (allocate (list (emerging) (us-equities)) initial-budget))
 
-(let ((budget 100)
-      (fund (list (emerging) (us-equities))))
-  (sort fund (lambda (x y) (> (far-off x) (far-off y)))))
+
+
+
 
 
 
