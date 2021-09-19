@@ -18,31 +18,13 @@
                :price ,price
                :budget initial-budget)))
 
+;; todo make these all lists and then just map each of them to create-etf
 (create-etf 'emerging .05 'VWO 51.44)
 (create-etf 'us-equities .30 'VTI 229.13)
 (create-etf 'foreign-equities .15 'VT 105.15)
-
-
-(defmacro inter-treasuries ()
-  `(make-etf :ticker 'VGIT
-             :weight .15
-             :num 0
-             :price 67.96 
-             :budget initial-budget))
-
-(defmacro tips ()
-  `(make-etf :ticker 'VTIP
-             :weight .15
-             :num 0
-             :price 52.66 
-             :budget initial-budget))
-
-(defmacro reits ()
-  `(make-etf :ticker 'VNQ
-             :weight .20
-             :num 0
-             :price 106.37
-             :budget initial-budget))
+(create-etf 'inter-treasuries .15 'VGIT 67.96)
+(create-etf 'tips .15 'VTIP 52.66 )
+(create-etf 'reits .20 'VNQ 106.37)
 
 (defmethod expenditure (e)
   (* (etf-num e) (etf-price e)))
