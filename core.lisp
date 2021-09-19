@@ -21,6 +21,9 @@
 (defmethod expenditure (e)
   (* (etf-num e) (etf-price e)))
 
+(defun total-expenditure (fund)
+  (apply #'+ (mapcar #'expenditure fund)))
+
 (defmacro current-weight (e)
   `(if (zerop (etf-num ,e))
       0
@@ -29,15 +32,9 @@
 (defmacro far-off (e)
   `(- (etf-weight ,e) (current-weight ,e)))
 
-(defun total-expenditure (fund)
-  (apply #'+ (mapcar #'expenditure fund)))
 
 (defun next-pick (fund budget)
   (car (sort fund (lambda (x y)
-                    (print (etf-weight x))
-                    (print (current-weight x))
-                    (print (etf-weight y))
-                    (print (current-weight y))
                     (> (far-off x) (far-off y))))))
 
 (defun allocate (fund budget)
@@ -48,7 +45,9 @@
         (allocate fund (- budget (etf-price pick))))))
 
 (let ((initial-budget 100))
-  (allocate (list (emerging) (us-equities)) initial-budget))
+  (allocate (list (emerging)
+                  (us-equities))
+            initial-budget))
 
 
 
