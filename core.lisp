@@ -8,29 +8,20 @@
   price
   budget)
 
-(defmacro emerging ()
-  `(make-etf :ticker 'VWO
-             :asset-class 'emerging
-             :weight .05
-             :num 0
-             :price 51.44
-             :budget initial-budget))
 
-(defmacro us-equities ()
-  `(make-etf :asset-class 'us-equities
-             :ticker 'VTI
-             :weight .30
-             :num 0
-             :price 229.13 
-             :budget initial-budget))
+(defun create-etf (asset-class weight ticker price)
+  `(defmacro ,asset-class ()
+     (make-etf :ticker ,ticker
+               :asset-class ,asset-class
+               :weight ,weight
+               :num 0
+               :price ,price
+               :budget initial-budget)))
 
-(defmacro foreign-equities ()
-  `(make-etf :asset-class 'foreign-equities
-             :ticker 'VT
-             :weight .15
-             :num 0
-             :price 105.15
-             :budget initial-budget))
+(create-etf 'emerging .05 'VWO 51.44)
+(create-etf 'us-equities .30 'VTI 229.13)
+(create-etf 'foreign-equities .15 'VT 105.15)
+
 
 (defmacro inter-treasuries ()
   `(make-etf :ticker 'VGIT
