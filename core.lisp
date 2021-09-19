@@ -11,7 +11,7 @@
 (defvar swensen-model
   '((emerging .05 VWO 51.44)
     (us-equities .30 VTI 229.13)
-    (foreign-equities .15 VT 105.15)
+    (foreign-equities .15 VEU 63)
     (inter-treasuries .15 VGIT 67.96)
     (tips .15 VTIP 52.66 )
     (reits .20 VNQ 106.37)))
