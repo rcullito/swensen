@@ -1,45 +1,56 @@
 
 
 (defstruct etf
+  ticker
+  asset-class
   weight
   num
   price
   budget)
 
 (defmacro emerging ()
-  `(make-etf :weight .05
+  `(make-etf :ticker 'VWO
+             :asset-class 'emerging
+             :weight .05
              :num 0
-             :price 51.44 ;; VWO
+             :price 51.44
              :budget initial-budget))
 
 (defmacro us-equities ()
-  `(make-etf :weight .30
+  `(make-etf :asset-class 'us-equities
+             :ticker 'VTI
+             :weight .30
              :num 0
-             :price 229.13 ;; VTI
+             :price 229.13 
              :budget initial-budget))
 
 (defmacro foreign-equities ()
-  `(make-etf :weight .15
+  `(make-etf :asset-class 'foreign-equities
+             :ticker 'VT
+             :weight .15
              :num 0
-             :price 105.15 ;; VT
+             :price 105.15
              :budget initial-budget))
 
 (defmacro inter-treasuries ()
-  `(make-etf :weight .15
+  `(make-etf :ticker 'VGIT
+             :weight .15
              :num 0
-             :price 67.96 ;; VGIT
+             :price 67.96 
              :budget initial-budget))
 
 (defmacro tips ()
-  `(make-etf :weight .15
+  `(make-etf :ticker 'VTIP
+             :weight .15
              :num 0
-             :price 52.66 ;; VTIP
+             :price 52.66 
              :budget initial-budget))
 
 (defmacro reits ()
-  `(make-etf :weight .20
+  `(make-etf :ticker 'VNQ
+             :weight .20
              :num 0
-             :price 106.37 ;; VNQ
+             :price 106.37
              :budget initial-budget))
 
 (defmethod expenditure (e)
