@@ -7,16 +7,40 @@
   budget)
 
 (defmacro emerging ()
-  `(make-etf :weight .30
+  `(make-etf :weight .05
              :num 0
-             :price 10
+             :price 51.44 ;; VWO
              :budget initial-budget))
 
 (defmacro us-equities ()
-  `(make-etf :weight .70
-            :num 0
-            :price 10
-            :budget initial-budget))
+  `(make-etf :weight .30
+             :num 0
+             :price 229.13 ;; VTI
+             :budget initial-budget))
+
+(defmacro foreign-equities ()
+  `(make-etf :weight .15
+             :num 0
+             :price 105.15 ;; VT
+             :budget initial-budget))
+
+(defmacro inter-treasuries ()
+  `(make-etf :weight .15
+             :num 0
+             :price 67.96 ;; VGIT
+             :budget initial-budget))
+
+(defmacro tips ()
+  `(make-etf :weight .15
+             :num 0
+             :price 52.66 ;; VTIP
+             :budget initial-budget))
+
+(defmacro reits ()
+  `(make-etf :weight .20
+             :num 0
+             :price 106.37 ;; VNQ
+             :budget initial-budget))
 
 (defmethod expenditure (e)
   (* (etf-num e) (etf-price e)))
@@ -44,9 +68,13 @@
         (incf (etf-num pick))
         (allocate fund (- budget (etf-price pick))))))
 
-(let ((initial-budget 100))
+(let ((initial-budget 4000))
   (allocate (list (emerging)
-                  (us-equities))
+                  (us-equities)
+                  (foreign-equities)
+                  (inter-treasuries)
+                  (tips)
+                  (reits))
             initial-budget))
 
 
